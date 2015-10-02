@@ -44,7 +44,7 @@ class DateDialog(wx.Dialog):
 		if DateDialog._instance is not None:
 			return
 		DateDialog._instance = self
-		# Translators: The title of the Date Dialog
+		# Translators: The title of the Date Dialog.
 		super(DateDialog,self).__init__(parent,title=_("Get the day of the week"))
 		dialogSizer=wx.BoxSizer(wx.VERTICAL)
 		# Translators: A label for a list in a dialog.
@@ -88,11 +88,17 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		self.createSubMenu()
 
 	def createSubMenu(self):
-		self.sub_menu = gui.mainFrame.sysTrayIcon.toolsMenu
+		self.toolsMenu = gui.mainFrame.sysTrayIcon.toolsMenu
 		# Translators: Item in the tools menu for the Addon dayOfTheWeek.
-		self.dayOfTheWeek = self.sub_menu.Append(wx.ID_ANY, _("&Day of the week..."),
+		self.dayOfTheWeek = self.toolsMenu.Append(wx.ID_ANY, _("&Day of the week..."),
 		"")
 		gui.mainFrame.sysTrayIcon.Bind(wx.EVT_MENU, self.showDialog, self.dayOfTheWeek)
+
+	def terminate(self):
+		try:
+			self.toolsMenu.RemoveItem(self.dayOfTheWeek)
+		except wx.PyDeadObjectError:
+			pass
 
 	def showDialog(self, evt):
 		if gui.isInMessageBox:
