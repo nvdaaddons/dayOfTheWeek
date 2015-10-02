@@ -11,7 +11,7 @@ import gui
 import datetime
 # Importing the SCRCAT_TOOLS category from the globalCommands module.
 from globalCommands import SCRCAT_TOOLS
-from gui import MainFrame
+
 # The weekDays tuple
 weekDays = (
 	# Translators: A day of the week.
@@ -29,11 +29,6 @@ def getDayName(numberedDay=1):
 	return day
 
 def getDayOfWeek(iYear, iMonth, iDay):
-	""" Returns the day of the week corresponding to the chosen date.
-	@param1 : The year of the date.
-	@param2 : The month of the date.
-	@param3: The day of the date.
-	"""
 	d = datetime.date(int(iYear), int(iMonth), int(iDay))
 	theDay = getDayName(d.isoweekday())
 	return theDay
