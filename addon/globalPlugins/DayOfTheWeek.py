@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 # Allows you to find the day of the week corresponding to a choosen date
 # Authors:
 # Abdel <abdelkrim.bensaid@gmail.com>
