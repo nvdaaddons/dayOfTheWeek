@@ -15,14 +15,14 @@ from globalCommands import SCRCAT_TOOLS
 # The weekDays tuple
 weekDays = (
 	# Translators: A day of the week.
-	_(u"Monday"),
-	_(u"Tuesday"),
-	_(u"Wednesday"),
-	_(u"Thursday"),
-	_(u"Friday"),
-	_(u"Saturday"),
-	_(u"Sunday")
-	)
+	_("Monday"),
+	_("Tuesday"),
+	_("Wednesday"),
+	_("Thursday"),
+	_("Friday"),
+	_("Saturday"),
+	_("Sunday")
+)
 
 def getDayName(numberedDay=1):
 	day = weekDays[numberedDay - 1]
@@ -34,7 +34,7 @@ def getDayOfWeek(iYear, iMonth, iDay):
 	@param2 : The month of the date.
 	@param3: The day of the date.
 	"""
-	d=datetime.datetime(int(iYear), int(iMonth), int(iDay))
+	d = datetime.date(int(iYear), int(iMonth), int(iDay))
 	theDay = getDayName(d.isoweekday())
 	return theDay
 
