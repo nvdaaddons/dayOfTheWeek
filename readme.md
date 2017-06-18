@@ -15,6 +15,10 @@ It adds an item in the NVDA Tools menu named "Day of the week", to open a dialog
 *	 You can close this dialog just by pressing Escape.
 *	 You can assign a shortcut to open the dialog in "Input gestures" menu and, more precisely, in the "Tools" category.
 
+## Changes for 2.0 ##
+
+* Days of the week have been translated, so that the add-on works properly in the different languages.
+
 ## Changes for 1.0 ##
 *	 Initial version.
 

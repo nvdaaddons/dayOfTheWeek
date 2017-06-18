@@ -1,8 +1,6 @@
-# -*- coding: utf-8 -*-
-# Allows you to find the day of the week corresponding to a chosen date
-# Authors:
-# Abdel <abdelkrim.bensaid@gmail.com>
-# Noelia <nrm1977@gmail.com>
+# dayOfTheWeek.py: Allows you to find the day of the week corresponding to a chosen date
+#Copyright (C) 2015-2017 Abdel <abdelkrim.bensaid@gmail.com>, Noelia <nrm1977@gmail.com>
+# Released under GPL 2
 
 import addonHandler
 addonHandler.initTranslation()
@@ -11,6 +9,16 @@ import wx
 import gui
 # Importing the SCRCAT_TOOLS category from the globalCommands module.
 from globalCommands import SCRCAT_TOOLS
+
+weekDays = {
+	"0": _("Sunday"),
+	"1": _("Monday"),
+	"2": _("Tuesday"),
+	"3": _("Wednesday"),
+	"4": _("Thursday"),
+	"5": _("Friday"),
+	"6": _("Saturday"),
+	}
 
 class DateDialog(wx.Dialog):
 	_instance = None
@@ -52,7 +60,7 @@ class DateDialog(wx.Dialog):
 
 	def onOk(self, evt):
 		date = self.datePicker.GetValue()
-		weekDay = date.Format("%A")
+		weekDay = weekDays[date.Format("%w")]
 		msgBox=gui.messageBox(
 		message=weekDay,
 		# Translators: The title of a dialog.
@@ -63,6 +71,7 @@ class DateDialog(wx.Dialog):
 		self.Destroy()
 
 class GlobalPlugin(globalPluginHandler.GlobalPlugin):
+
 	def __init__(self, *args, **kwargs):
 		super(GlobalPlugin, self).__init__(*args, **kwargs)
 		self.createSubMenu()
