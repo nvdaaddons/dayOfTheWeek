@@ -132,11 +132,19 @@ class DayOfWeekSettingsDialog (SettingsDialog):
 
 class MyDayOfWeek (IAccessible):
 
+	increment = 0
+
 	def event_gainFocus (self):
 		global curDateField
 		speech.speakObject (self, reason = controlTypes.REASON_FOCUS)
 		if curDateField == 0: curDateField += 1
 		self.sayField (curDateField)
+
+	def event_valueChange(self):
+		if self.increment != 0:
+			speech.cancelSpeech()
+		else:
+			super(MyDayOfWeek, self).event_valueChange()
 
 	def sayField (self, columnID):
 		fieldID = columnID - 1
@@ -157,32 +165,23 @@ class MyDayOfWeek (IAccessible):
 		self.sayField (curDateField)
 
 	def script_switchBetweenDateFields (self, gesture):
-		val1 = self.value
-		increment = 0
 		gesture.send ()
+		val1 = self.value
 		# I know it is not correct to do this, but we can't do otherwise.
 		# We check if the speechMode is off or note.
-		if savedSpeechMode:
-			speech.speechMode = speech.speechMode_off
-			keyboardHandler.KeyboardInputGesture.fromName ("downArrow").send ()
-			increment = 1
-			api.processPendingEvents ()
-			val2 = self.value
-			# We verify that we are not on the last value
-			if val1 == val2:
-				# In this case, we move to the previous value.
-				keyboardHandler.KeyboardInputGesture.fromName ("upArrow").send ()
-				increment = -1
-				api.processPendingEvents ()
-			# We restore the value of the current date.
-			if increment == -1:
-				keyboardHandler.KeyboardInputGesture.fromName ("downArrow").send ()
-				api.processPendingEvents ()
-			if increment == 1:
-				keyboardHandler.KeyboardInputGesture.fromName ("upArrow").send ()
-				api.processPendingEvents ()
-			# We give back to the speechMode its saved value.
-			speech.speechMode = savedSpeechMode
+		#if savedSpeechMode:
+			#speech.speechMode = speech.speechMode_off
+		keyboardHandler.KeyboardInputGesture.fromName ("downArrow").send ()
+		self.increment = 1
+		api.processPendingEvents ()
+		val2 = self.value
+		# We verify that we are not on the last value
+		# We restore the value of the current date.
+		keyboardHandler.KeyboardInputGesture.fromName ("upArrow").send ()
+		api.processPendingEvents ()
+		# We give back to the speechMode its saved value.
+		#speech.speechMode = savedSpeechMode
+		self.increment = 0
 		self.whatChanged (val1, val2)
 
 	__gestures = {
