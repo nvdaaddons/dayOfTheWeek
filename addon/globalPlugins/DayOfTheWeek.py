@@ -135,58 +135,54 @@ class MyDayOfWeek (IAccessible):
 	increment = 0
 
 	def event_gainFocus (self):
-		global curDateField
 		speech.speakObject (self, reason = controlTypes.REASON_FOCUS)
-		if curDateField == 0: curDateField += 1
-		self.sayField (curDateField)
+		self.dateFieldLabel = _("You can select a %s with the vertical arrows" % self.getCurrentDateField())
+		ui.message(self.dateFieldLabel)
+		self.increment = 0
 
 	def event_valueChange(self):
 		if self.increment != 0:
-			speech.cancelSpeech()
+			return
 		else:
 			super(MyDayOfWeek, self).event_valueChange()
 
-	def sayField (self, columnID):
-		fieldID = columnID - 1
-		label = fieldLabels[fieldID]
-		if config.conf["dayOfWeek"]["reportLabels"]:
-			ui.message (label)
-
-	def whatChanged (self, val1, val2):
-		global curDateField
+	def getCurrentDateField(self):
+		val1 = self.value
+		self.increment = 1
+		keyboardHandler.KeyboardInputGesture.fromName ("downArrow").send ()
+		api.processPendingEvents ()
+		val2 = self.value
+		if val1 == val2:
+			self.increment = 01
+			keyboardHandler.KeyboardInputGesture.fromName ("upArrow").send ()
+			api.processPendingEvents ()
+			val2 = self.value
+		if self.increment == 1:
+			keyboardHandler.KeyboardInputGesture.fromName ("upArrow").send ()
+		else:
+			keyboardHandler.KeyboardInputGesture.fromName ("upArrow").send ()
 		val1 = val1.split ("/")
 		val2 = val2.split ("/")
 		if val1[0] != val2[0]:
-			curDateField = 1
-		if val1[1] != val2[1]:
-			curDateField = 2
-		if val1[2] != val2[2]:
-			curDateField = 3
-		self.sayField (curDateField)
+			# Translators: Label of a date field.
+			label = _("day")
+		elif val1[1] != val2[1]:
+			# Translators: Label of a date field.
+			label = _("month")
+		else:
+			# Translators: Label of a date field.
+			label = _("year")
+		return label
 
 	def script_switchBetweenDateFields (self, gesture):
 		gesture.send ()
-		val1 = self.value
-		# I know it is not correct to do this, but we can't do otherwise.
-		# We check if the speechMode is off or note.
-		#if savedSpeechMode:
-			#speech.speechMode = speech.speechMode_off
-		keyboardHandler.KeyboardInputGesture.fromName ("downArrow").send ()
-		self.increment = 1
-		api.processPendingEvents ()
-		val2 = self.value
-		# We verify that we are not on the last value
-		# We restore the value of the current date.
-		keyboardHandler.KeyboardInputGesture.fromName ("upArrow").send ()
-		api.processPendingEvents ()
-		# We give back to the speechMode its saved value.
-		#speech.speechMode = savedSpeechMode
+		self.dateFieldLabel = _("You can select a %s with the vertical arrows" % self.getCurrentDateField())
+		ui.message(self.dateFieldLabel)
 		self.increment = 0
-		self.whatChanged (val1, val2)
 
 	__gestures = {
 		"kb:leftArrow":"switchBetweenDateFields",
-		"kb:rightArrow":"switchBetweenDateFields"
+		"kb:rightArrow":"switchBetweenDateFields",
 	}
 
 class GlobalPlugin (globalPluginHandler.GlobalPlugin):
